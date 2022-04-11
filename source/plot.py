@@ -1,5 +1,4 @@
 import numpy as numpy
-import pandas as pandas
 from matplotlib import pyplot as pyplot
 from matplotlib.colors import ListedColormap
 
@@ -8,7 +7,7 @@ from matplotlib.colors import ListedColormap
 def biplot(cscore=None, loadings=None, labels=None, var1=None, var2=None, var3=None, axlabelfontsize=9,
            axlabelfontname="Arial", figname='biplot_2d',
            figtype='png', r=300, show=False, markerdot="o", dotsize=6, valphadot=1, colordot='#eba487',
-           arrowcolor='#87ceeb', xpadstart=0.2, xpadend=0.2, ypadstart=0.2, ypadend=0.2,
+           arrowcolor='#87ceeb', xpadstart=0.2, xpadend=0.2, ypadstart=0.2, ypadend=0.2, limitisexact=0,
            valphaarrow=1, arrowlinestyle='-', arrowlinewidth=0.5, centerlines=True, colorlist=None,
            legendpos='best',
            datapoints=True, dim=(6, 4), theme=None):
@@ -64,17 +63,27 @@ def biplot(cscore=None, loadings=None, labels=None, var1=None, var2=None, var3=N
         # ylimit_max = numpy.max([numpy.max(cscore[:, 1] * yscale), numpy.max(loadings[1])])
         # ylimit_min = numpy.min([numpy.min(cscore[:, 1] * yscale), numpy.min(loadings[1])])
 
-        xlimit_max = numpy.max(cscore[:, 0] * xscale)
-        xlimit_min = numpy.min(cscore[:, 0] * xscale)
-        ylimit_max = numpy.max(cscore[:, 1] * yscale)
-        ylimit_min = numpy.min(cscore[:, 1] * yscale)
-        pyplot.xlim(xlimit_min - xpadstart, xlimit_max + xpadend)
-        pyplot.ylim(ylimit_min - ypadstart, ylimit_max + ypadend)
+        print(cscore[:, 0])
+
+        if limitisexact == 0:
+            xlimit_max = numpy.max(cscore[:, 0] * xscale)
+            xlimit_min = numpy.min(cscore[:, 0] * xscale)
+            ylimit_max = numpy.max(cscore[:, 1] * yscale)
+            ylimit_min = numpy.min(cscore[:, 1] * yscale)
+            pyplot.xlim(xlimit_min - xpadstart, xlimit_max + xpadend)
+            pyplot.ylim(ylimit_min - ypadstart, ylimit_max + ypadend)
+        else:
+            pyplot.xlim(xpadstart, xpadend)
+            pyplot.ylim(ypadstart, ypadend)
+
+        print(limitisexact)
 
         x_label = "PC1 ({}%)".format(var1)
         y_label = "PC2 ({}%)".format(var2)
         pyplot.xlabel(x_label, fontsize=axlabelfontsize, fontname=axlabelfontname)
         pyplot.ylabel(y_label, fontsize=axlabelfontsize, fontname=axlabelfontname)
+
+        print(figname)
 
         if show:
             pyplot.show()
