@@ -8,7 +8,9 @@ from pyforms.controls import ControlButton
 from pyforms.controls import ControlLabel
 from pyforms.controls import ControlNumber
 from pyforms.controls import ControlCombo
+from pyforms.controls import ControlCheckBox
 
+from source.mds import Mds
 from source.pca import Pca
 
 
@@ -63,6 +65,11 @@ class Gui(BaseWidget):
         self._generate_pca_button = ControlButton('Generate PCA')
         self._generate_pca_button.value = self.__generate_pca_pressed
 
+        self._show_pca = ControlCheckBox('Preview')
+
+        self._generate_mds_button = ControlButton('Generate MDS')
+        self._generate_mds_button.value = self.__generate_mds_pressed
+
         self._formset = [
             'File setup',
             '_data_file',
@@ -75,7 +82,9 @@ class Gui(BaseWidget):
             '_zoom_selection',
             ('_x_start', '_x_end', '_y_start', '_y_end'),
             '',
-            '_generate_pca_button'
+            ('_generate_pca_button', '=', '_show_pca'),
+            '',
+            '_generate_mds_button'
         ]
 
     def __data_file_selected(self):
@@ -167,4 +176,9 @@ class Gui(BaseWidget):
         else:
             pca.set_exact(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
 
-        pca.output()
+        pca.output(show=self._show_pca.value)
+
+    def __generate_mds_pressed(self):
+        print('Generating MDS')
+
+        mds = Mds()

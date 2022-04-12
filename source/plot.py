@@ -89,7 +89,7 @@ def biplot(cscore=None, loadings=None, labels=None, var1=None, var2=None, var3=N
             pyplot.show()
         else:
             pyplot.savefig(figname + '.' + figtype, format=figtype, bbox_inches='tight', dpi=r)
+            pyplot.clf()
+            pyplot.close()
         if theme == 'dark':
             pyplot.style.use('default')
-        pyplot.clf()
-        pyplot.close()
