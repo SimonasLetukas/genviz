@@ -144,19 +144,19 @@ class Gui(BaseWidget):
 
         print(self._dimensions_x.value)
         print(self._dimensions_y.value)
-        pca.set_dimensions(self._dimensions_x.value, self._dimensions_y.value)
+        pca.set_dimensions(int(self._dimensions_x.value), int(self._dimensions_y.value))
 
         print(self._marker_size.value)
-        pca.set_marker_size(self._marker_size.value)
+        pca.set_marker_size(int(self._marker_size.value))
 
         marker_alpha = float(self._marker_alpha.value) / 100
         print(marker_alpha)
         pca.set_marker_alpha(marker_alpha)
 
-        x_start = self._x_start.value
-        x_end = self._x_end.value
-        y_start = self._y_start.value
-        y_end = self._y_end.value
+        x_start = float(self._x_start.value)
+        x_end = float(self._x_end.value)
+        y_start = float(self._y_start.value)
+        y_end = float(self._y_end.value)
         print(self._selected_zoom_method)
         print(x_start)
         print(x_end)
