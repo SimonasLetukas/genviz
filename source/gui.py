@@ -48,7 +48,7 @@ class Gui(BaseWidget):
         self._dimensions_x = ControlNumber('Horizontal diagram size: ', default=10)
         self._dimensions_y = ControlNumber('Vertical diagram size: ', default=10)
 
-        self._marker_size = ControlSlider('Size of the marker: ', minimum=1, maximum=10, default=3)
+        self._marker_size = ControlSlider('Size of the marker: ', minimum=1, maximum=100, default=3)
         self._marker_alpha = ControlSlider('Alpha value of the marker: ', minimum=0, maximum=100, default=80,
                                            helptext='Alpha of 100 has no transparency while alpha of 0 is fully transparent')
 
@@ -70,6 +70,8 @@ class Gui(BaseWidget):
         self._generate_mds_button = ControlButton('Generate MDS')
         self._generate_mds_button.value = self.__generate_mds_pressed
 
+        self._show_mds = ControlCheckBox('Preview')
+
         self._formset = [
             'File setup',
             '_data_file',
@@ -84,7 +86,7 @@ class Gui(BaseWidget):
             '',
             ('_generate_pca_button', '=', '_show_pca'),
             '',
-            '_generate_mds_button'
+            ('_generate_mds_button', '=', '_show_mds')
         ]
 
     def __data_file_selected(self):
@@ -181,4 +183,8 @@ class Gui(BaseWidget):
     def __generate_mds_pressed(self):
         print('Generating MDS')
 
-        mds = Mds()
+        data_file = self._data_file.value
+        print(data_file)
+        if data_file is None:
+            return
+        mds = Mds(data_file)

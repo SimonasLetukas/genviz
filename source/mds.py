@@ -1,8 +1,10 @@
-import numpy as np
-from sklearn.datasets import load_iris
-import matplotlib.pyplot as plt
+import traceback
+
 from sklearn.manifold import MDS
 from sklearn.preprocessing import MinMaxScaler
+import pandas as pandas
+
+from source import plot
 
 RESOLUTION_HIGH = 1000
 RESOLUTION_MEDIUM = 500
@@ -10,22 +12,55 @@ RESOLUTION_LOW = 100
 
 
 class Mds:
-    def __init__(self):
-        data = load_iris()
-        X = data.data
-        scaler = MinMaxScaler()
-        X_scaled = scaler.fit_transform(X)
-        mds = MDS(2, random_state=0)
-        X_2d = mds.fit_transform(X_scaled)
+    def __init__(self, input_path):
+        self._figname = 'mds'
+        self._r = RESOLUTION_MEDIUM
+        self._axlabelfontsize = 8
+        self._markerdot = 'o'
+        self._dotsize = 2
+        self._valphadot = 0.8
+        self._dim = (10, 10)
+        self._xpadstart = 0.2
+        self._xpadend = 0.2
+        self._ypadstart = 0.2
+        self._ypadend = 0.2
+        self._isexact = 0
 
-        colors = ['red', 'green', 'blue']
-        plt.rcParams['figure.figsize'] = [7, 7]
-        plt.rc('font', size=14)
-        for i in np.unique(data.target):
-            subset = X_2d[data.target == i]
+        self._df = pandas.read_csv(input_path, delimiter='\t', header=None, names=['chromosome',
+                                                                                   'rs#',
+                                                                                   'genetic distance (morgans)',
+                                                                                   'base-pair position (bp units)'])
 
-            x = [row[0] for row in subset]
-            y = [row[1] for row in subset]
-            plt.scatter(x, y, c=colors[i], label=data.target_names[i])
-            plt.legend()
-        plt.show()
+        self._x = self._df.iloc[:, 2:4]
+        self._target = self._df['rs#'].to_numpy()
+        print(self._target)
+
+        try:
+            scaler = MinMaxScaler()
+            self._x_minmax = scaler.fit_transform(self._x)
+
+            print(self._x_minmax)
+
+            mds = MDS(n_components=2, random_state=0, n_init=2, n_jobs=1, max_iter=100)
+            self._x_2d = mds.fit_transform(self._x_minmax)
+            print(self._x_2d)
+        except Exception:
+            print(traceback.format_exc())
+
+        plot.scatter(figname=self._figname,
+                     x_2d=self._x_2d,
+                     target=self._target,
+                     show=1,
+                     axlabelfontsize=self._axlabelfontsize,
+                     r=self._r,
+                     markerdot=self._markerdot,
+                     dotsize=self._dotsize,
+                     valphadot=self._valphadot,
+                     dim=self._dim,
+                     xpadstart=self._xpadstart,
+                     xpadend=self._xpadend,
+                     ypadstart=self._ypadstart,
+                     ypadend=self._ypadend,
+                     limitisexact=self._isexact)
+
+

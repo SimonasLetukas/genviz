@@ -25,8 +25,6 @@ class Pca:
         self._ypadend = 0.2
         self._isexact = 0
 
-        self._input_path = input_path
-
         self._df = pandas.read_csv(input_path, delimiter='\t', header=None, names=['chromosome',
                                                                                    'rs#',
                                                                                    'genetic distance (morgans)',
@@ -40,7 +38,7 @@ class Pca:
         print(self._x.head(2))
 
         self._x_st = StandardScaler().fit_transform(self._x)
-        self._pca_out = PCA().fit(self._x_st)
+        self._pca_out = PCA(n_components=2).fit(self._x_st)
 
         self._loadings = self._pca_out.components_
 
