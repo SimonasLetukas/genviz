@@ -1,3 +1,4 @@
+import traceback
 from enum import Enum
 
 from pyforms import BaseWidget
@@ -72,6 +73,8 @@ class Gui(BaseWidget):
 
         self._show_mds = ControlCheckBox('Preview')
 
+        self._event_log = ControlLabel('')
+
         self._formset = [
             'File setup',
             '_data_file',
@@ -86,7 +89,10 @@ class Gui(BaseWidget):
             '',
             ('_generate_pca_button', '=', '_show_pca'),
             '',
-            ('_generate_mds_button', '=', '_show_mds')
+            ('_generate_mds_button', '=', '_show_mds'),
+            '',
+            'Error Log',
+            '_event_log'
         ]
 
     def __data_file_selected(self):
@@ -132,100 +138,104 @@ class Gui(BaseWidget):
 
     def __generate_pca_pressed(self):
         print('Generating PCA')
+        try:
+            data_file = self._data_file.value
+            print(data_file)
+            if data_file is None:
+                return
+            pca = Pca(data_file)
 
-        data_file = self._data_file.value
-        print(data_file)
-        if data_file is None:
-            return
-        pca = Pca(data_file)
+            output_file = self._output_file.value
+            print(output_file)
+            if output_file is None:
+                return
+            pca.set_figure_name(output_file)
 
-        output_file = self._output_file.value
-        print(output_file)
-        if output_file is None:
-            return
-        pca.set_figure_name(output_file)
+            print(self._selected_resolution)
+            if self._selected_resolution is SelectedResolution.HIGH:
+                pca.set_high_resolution()
+            elif self._selected_resolution is SelectedResolution.MEDIUM:
+                pca.set_medium_resolution()
+            else:
+                pca.set_low_resolution()
 
-        print(self._selected_resolution)
-        if self._selected_resolution is SelectedResolution.HIGH:
-            pca.set_high_resolution()
-        elif self._selected_resolution is SelectedResolution.MEDIUM:
-            pca.set_medium_resolution()
-        else:
-            pca.set_low_resolution()
+            print(self._dimensions_x.value)
+            print(self._dimensions_y.value)
+            pca.set_dimensions(int(self._dimensions_x.value), int(self._dimensions_y.value))
 
-        print(self._dimensions_x.value)
-        print(self._dimensions_y.value)
-        pca.set_dimensions(int(self._dimensions_x.value), int(self._dimensions_y.value))
+            print(self._marker_size.value)
+            pca.set_marker_size(int(self._marker_size.value))
 
-        print(self._marker_size.value)
-        pca.set_marker_size(int(self._marker_size.value))
+            marker_alpha = float(self._marker_alpha.value) / 100
+            print(marker_alpha)
+            pca.set_marker_alpha(marker_alpha)
 
-        marker_alpha = float(self._marker_alpha.value) / 100
-        print(marker_alpha)
-        pca.set_marker_alpha(marker_alpha)
+            x_start = float(self._x_start.value)
+            x_end = float(self._x_end.value)
+            y_start = float(self._y_start.value)
+            y_end = float(self._y_end.value)
+            print(self._selected_zoom_method)
+            print(x_start)
+            print(x_end)
+            print(y_start)
+            print(y_end)
+            if self._selected_zoom_method is SelectedZoomMethod.PADDING:
+                pca.set_padding(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
+            else:
+                pca.set_exact(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
 
-        x_start = float(self._x_start.value)
-        x_end = float(self._x_end.value)
-        y_start = float(self._y_start.value)
-        y_end = float(self._y_end.value)
-        print(self._selected_zoom_method)
-        print(x_start)
-        print(x_end)
-        print(y_start)
-        print(y_end)
-        if self._selected_zoom_method is SelectedZoomMethod.PADDING:
-            pca.set_padding(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
-        else:
-            pca.set_exact(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
-
-        pca.output(show=self._show_pca.value)
+            pca.output(show=self._show_pca.value)
+        except Exception:
+            self._event_log.value = traceback.format_exc(limit=1)
 
     def __generate_mds_pressed(self):
         print('Generating MDS')
+        try:
+            data_file = self._data_file.value
+            print(data_file)
+            if data_file is None:
+                return
+            mds = Mds(data_file)
 
-        data_file = self._data_file.value
-        print(data_file)
-        if data_file is None:
-            return
-        mds = Mds(data_file)
+            output_file = self._output_file.value
+            print(output_file)
+            if output_file is None:
+                return
+            mds.set_figure_name(output_file)
 
-        output_file = self._output_file.value
-        print(output_file)
-        if output_file is None:
-            return
-        mds.set_figure_name(output_file)
+            print(self._selected_resolution)
+            if self._selected_resolution is SelectedResolution.HIGH:
+                mds.set_high_resolution()
+            elif self._selected_resolution is SelectedResolution.MEDIUM:
+                mds.set_medium_resolution()
+            else:
+                mds.set_low_resolution()
 
-        print(self._selected_resolution)
-        if self._selected_resolution is SelectedResolution.HIGH:
-            mds.set_high_resolution()
-        elif self._selected_resolution is SelectedResolution.MEDIUM:
-            mds.set_medium_resolution()
-        else:
-            mds.set_low_resolution()
+            print(self._dimensions_x.value)
+            print(self._dimensions_y.value)
+            mds.set_dimensions(int(self._dimensions_x.value), int(self._dimensions_y.value))
 
-        print(self._dimensions_x.value)
-        print(self._dimensions_y.value)
-        mds.set_dimensions(int(self._dimensions_x.value), int(self._dimensions_y.value))
+            print(self._marker_size.value)
+            mds.set_marker_size(int(self._marker_size.value))
 
-        print(self._marker_size.value)
-        mds.set_marker_size(int(self._marker_size.value))
+            marker_alpha = float(self._marker_alpha.value) / 100
+            print(marker_alpha)
+            mds.set_marker_alpha(marker_alpha)
 
-        marker_alpha = float(self._marker_alpha.value) / 100
-        print(marker_alpha)
-        mds.set_marker_alpha(marker_alpha)
+            x_start = float(self._x_start.value)
+            x_end = float(self._x_end.value)
+            y_start = float(self._y_start.value)
+            y_end = float(self._y_end.value)
+            print(self._selected_zoom_method)
+            print(x_start)
+            print(x_end)
+            print(y_start)
+            print(y_end)
+            if self._selected_zoom_method is SelectedZoomMethod.PADDING:
+                mds.set_padding(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
+            else:
+                mds.set_exact(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
 
-        x_start = float(self._x_start.value)
-        x_end = float(self._x_end.value)
-        y_start = float(self._y_start.value)
-        y_end = float(self._y_end.value)
-        print(self._selected_zoom_method)
-        print(x_start)
-        print(x_end)
-        print(y_start)
-        print(y_end)
-        if self._selected_zoom_method is SelectedZoomMethod.PADDING:
-            mds.set_padding(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
-        else:
-            mds.set_exact(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
-
-        mds.output(show=self._show_mds.value)
+            mds.output(show=self._show_mds.value)
+        except Exception:
+            self._event_log.value = traceback.format_exc(limit=1)
