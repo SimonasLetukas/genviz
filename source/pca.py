@@ -47,7 +47,7 @@ class Pca:
         self._pca_scores = PCA().fit_transform(self._x_st)
 
     def set_figure_name(self, value):
-        self._figname = value
+        self._figname = value + '_pca'
 
     def set_high_resolution(self):
         self._r = RESOLUTION_HIGH

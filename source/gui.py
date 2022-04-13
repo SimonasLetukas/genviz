@@ -188,3 +188,44 @@ class Gui(BaseWidget):
         if data_file is None:
             return
         mds = Mds(data_file)
+
+        output_file = self._output_file.value
+        print(output_file)
+        if output_file is None:
+            return
+        mds.set_figure_name(output_file)
+
+        print(self._selected_resolution)
+        if self._selected_resolution is SelectedResolution.HIGH:
+            mds.set_high_resolution()
+        elif self._selected_resolution is SelectedResolution.MEDIUM:
+            mds.set_medium_resolution()
+        else:
+            mds.set_low_resolution()
+
+        print(self._dimensions_x.value)
+        print(self._dimensions_y.value)
+        mds.set_dimensions(int(self._dimensions_x.value), int(self._dimensions_y.value))
+
+        print(self._marker_size.value)
+        mds.set_marker_size(int(self._marker_size.value))
+
+        marker_alpha = float(self._marker_alpha.value) / 100
+        print(marker_alpha)
+        mds.set_marker_alpha(marker_alpha)
+
+        x_start = float(self._x_start.value)
+        x_end = float(self._x_end.value)
+        y_start = float(self._y_start.value)
+        y_end = float(self._y_end.value)
+        print(self._selected_zoom_method)
+        print(x_start)
+        print(x_end)
+        print(y_start)
+        print(y_end)
+        if self._selected_zoom_method is SelectedZoomMethod.PADDING:
+            mds.set_padding(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
+        else:
+            mds.set_exact(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
+
+        mds.output(show=self._show_mds.value)

@@ -47,10 +47,52 @@ class Mds:
         except Exception:
             print(traceback.format_exc())
 
+    def set_figure_name(self, value):
+        self._figname = value + '_mds'
+
+    def set_high_resolution(self):
+        self._r = RESOLUTION_HIGH
+
+    def set_medium_resolution(self):
+        self._r = RESOLUTION_MEDIUM
+
+    def set_low_resolution(self):
+        self._r = RESOLUTION_LOW
+
+    def set_label_font_size(self, value):
+        self._axlabelfontsize = value
+
+    def set_marker_format(self, value):
+        self._markerdot = value
+
+    def set_marker_size(self, value):
+        self._dotsize = value
+
+    def set_marker_alpha(self, value):
+        self._valphadot = value
+
+    def set_dimensions(self, x, y):
+        self._dim = (x, y)
+
+    def set_padding(self, x_start, x_end, y_start, y_end):
+        self._xpadstart = x_start
+        self._xpadend = x_end
+        self._ypadstart = y_start
+        self._ypadend = y_end
+        self._isexact = 0
+
+    def set_exact(self, x_start, x_end, y_start, y_end):
+        self._xpadstart = x_start
+        self._xpadend = x_end
+        self._ypadstart = y_start
+        self._ypadend = y_end
+        self._isexact = 1
+
+    def output(self, show=0):
         plot.scatter(figname=self._figname,
                      x_2d=self._x_2d,
                      target=self._target,
-                     show=1,
+                     show=show,
                      axlabelfontsize=self._axlabelfontsize,
                      r=self._r,
                      markerdot=self._markerdot,
@@ -62,5 +104,3 @@ class Mds:
                      ypadstart=self._ypadstart,
                      ypadend=self._ypadend,
                      limitisexact=self._isexact)
-
-
