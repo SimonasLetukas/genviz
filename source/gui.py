@@ -4,6 +4,7 @@ from enum import Enum
 from pyforms import BaseWidget
 from pyforms.controls import ControlFile
 from pyforms.controls import ControlText
+from pyforms.controls import ControlTextArea
 from pyforms.controls import ControlSlider
 from pyforms.controls import ControlButton
 from pyforms.controls import ControlLabel
@@ -32,8 +33,14 @@ class Gui(BaseWidget):
 
         self.set_margin(30)
 
-        self._data_file = ControlFile('.map file location: ')
+        self._data_file = ControlFile('Input file location: ')
         self._data_file.changed_event = self.__data_file_selected
+        self._input_headers = ControlTextArea('Comma-separated headers (if empty, first row from the input file will '
+                                              'be used instead): ', default='')
+        self._use_columns = ControlTextArea('Use columns (comma-separated indexes, starts at 1; use all if empty): ',
+                                            default='')
+        self._classifier_column = ControlNumber('Index of classifier column (starts at 1, calculated from used '
+                                                'columns above): ', default=1, minimum=1)
         self._output_file = ControlText('Name of the output diagram: ', default='biplot_2d')
 
         self._resolution_label = ControlLabel('Resolution: ')
@@ -46,8 +53,8 @@ class Gui(BaseWidget):
         self._resolution_low_button = ControlButton('Low', checkable=1)
         self._resolution_low_button.value = self.__resolution_low_button_pressed
 
-        self._dimensions_x = ControlNumber('Horizontal diagram size: ', default=10)
-        self._dimensions_y = ControlNumber('Vertical diagram size: ', default=10)
+        self._dimensions_x = ControlNumber('Horizontal diagram size: ', default=10, minimum=1)
+        self._dimensions_y = ControlNumber('Vertical diagram size: ', default=10, minimum=1)
 
         self._marker_size = ControlSlider('Size of the marker: ', minimum=1, maximum=100, default=3)
         self._marker_alpha = ControlSlider('Alpha value of the marker: ', minimum=0, maximum=100, default=80,
@@ -73,40 +80,39 @@ class Gui(BaseWidget):
 
         self._show_mds = ControlCheckBox('Preview')
 
-        self._event_log = ControlLabel('')
+        self._clear_logs_button = ControlButton('Clear logs')
+        self._clear_logs_button.value = self.__clear_logs_button_pressed
+        self._event_log = ControlLabel('No error logs to show.')
 
         self._formset = [
-            'File setup',
+            'File Setup',
             '_data_file',
+            '_input_headers',
+            '_use_columns',
+            '_classifier_column',
             '_output_file',
             '',
-            'View options',
+            ('Error Log', '', '', '', '', '', '', '', '', '', '',
+             '', '', '', '', '', '', '', '', '', '', '', '_clear_logs_button'),
+            '_event_log',
+            '||',
+            'View Options',
             ('_resolution_label', '_resolution_low_button', '_resolution_medium_button', '_resolution_high_button'),
             ('_dimensions_x', '_dimensions_y'),
             ('_marker_size', '_marker_alpha'),
             '_zoom_selection',
             ('_x_start', '_x_end', '_y_start', '_y_end'),
             '',
+            'Output Diagrams',
             ('_generate_pca_button', '=', '_show_pca'),
             '',
-            ('_generate_mds_button', '=', '_show_mds'),
-            '',
-            'Error Log',
-            '_event_log'
+            ('_generate_mds_button', '=', '_show_mds')
         ]
 
     def __data_file_selected(self):
         if self._data_file is None:
             return
-        if not self._data_file.value.lower().endswith('.map'):
-            print('Not .map file')
-            self._data_file.changed_event = self.__empty_event
-            self._data_file.value = None
-            self._data_file.changed_event = self.__data_file_selected
         print(self._data_file.value)
-
-    def __empty_event(self):
-        return
 
     def __resolution_high_button_pressed(self):
         self._selected_resolution = SelectedResolution.HIGH
@@ -136,6 +142,9 @@ class Gui(BaseWidget):
         self._selected_zoom_method = SelectedZoomMethod(int(self._zoom_selection.value))
         print(self._selected_zoom_method)
 
+    def __clear_logs_button_pressed(self):
+        self._event_log.value = 'No error logs to show.'
+
     def __generate_pca_pressed(self):
         print('Generating PCA')
         try:
@@ -143,7 +152,8 @@ class Gui(BaseWidget):
             print(data_file)
             if data_file is None:
                 return
-            pca = Pca(data_file)
+            pca = Pca(input_path=data_file, header_names=self._input_headers.value, use_columns=self._use_columns.value,
+                      classifier_column=self._classifier_column.value)
 
             output_file = self._output_file.value
             print(output_file)
@@ -195,7 +205,8 @@ class Gui(BaseWidget):
             print(data_file)
             if data_file is None:
                 return
-            mds = Mds(data_file)
+            mds = Mds(input_path=data_file, header_names=self._input_headers.value, use_columns=self._use_columns.value,
+                      classifier_column=self._classifier_column.value)
 
             output_file = self._output_file.value
             print(output_file)

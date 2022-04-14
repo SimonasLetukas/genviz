@@ -12,7 +12,8 @@ RESOLUTION_LOW = 100
 
 
 class Mds:
-    def __init__(self, input_path):
+    def __init__(self, input_path, header_names, use_columns, classifier_column):
+        # set defaults
         self._figname = 'mds'
         self._r = RESOLUTION_MEDIUM
         self._axlabelfontsize = 8
@@ -26,14 +27,21 @@ class Mds:
         self._ypadend = 0.2
         self._isexact = 0
 
-        self._df = pandas.read_csv(input_path, delimiter='\t', header=None, names=['chromosome',
-                                                                                   'rs#',
-                                                                                   'genetic distance (morgans)',
-                                                                                   'base-pair position (bp units)'])
+        names = None if header_names is None or header_names.strip() == '' \
+            else header_names.strip().split(',')
 
-        self._x = self._df.iloc[:, 2:4]
-        self._target = self._df['rs#'].to_numpy()
-        print(self._target)
+        usecols = None if use_columns is None or use_columns.strip() is False \
+            else [x - 1 for x in [int(x) for x in use_columns.split(',') if x.strip().isdigit()]]
+
+        self._df = pandas.read_csv(input_path, sep=None, header='infer', engine='python', usecols=usecols, names=names)
+
+        print(self._df.head(2))
+
+        col_count = self._df.shape[1]
+        cols_without_classifier = [x for x in range(col_count) if x != int(classifier_column) - 1]
+
+        self._x = self._df.iloc[:, cols_without_classifier]
+        self._target = self._df.iloc[:, int(classifier_column) - 1].to_numpy()
 
         try:
             scaler = MinMaxScaler()

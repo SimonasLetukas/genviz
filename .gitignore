@@ -158,3 +158,8 @@ fabric.properties
 *.ped
 *.png
 *.txt
+*.pversion
+*.bed
+*.bim
+*.fam
+*.log
