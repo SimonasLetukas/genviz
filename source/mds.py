@@ -43,17 +43,14 @@ class Mds:
         self._x = self._df.iloc[:, cols_without_classifier]
         self._target = self._df.iloc[:, int(classifier_column) - 1].to_numpy()
 
-        try:
-            scaler = MinMaxScaler()
-            self._x_minmax = scaler.fit_transform(self._x)
+        scaler = MinMaxScaler()
+        self._x_minmax = scaler.fit_transform(self._x)
 
-            print(self._x_minmax)
+        print(self._x_minmax)
 
-            mds = MDS(n_components=2, random_state=0, n_init=2, n_jobs=1, max_iter=100)
-            self._x_2d = mds.fit_transform(self._x_minmax)
-            print(self._x_2d)
-        except Exception:
-            print(traceback.format_exc())
+        mds = MDS(n_components=2, random_state=0, n_init=2, n_jobs=1, max_iter=100)
+        self._x_2d = mds.fit_transform(self._x_minmax)
+        print(self._x_2d)
 
     def set_figure_name(self, value):
         self._figname = value + '_mds'
