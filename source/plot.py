@@ -4,8 +4,12 @@ from matplotlib.colors import ListedColormap
 
 
 # from https://github.com/reneshbedre/bioinfokit/blob/master/bioinfokit/visuz.py
-def biplot(cscore=None, loadings=None, labels=None, var1=None, var2=None, var3=None, axlabelfontsize=9,
-           axlabelfontname="Arial", figname='biplot_2d', show=False, save=True,
+from source.functions import Functions
+
+
+def biplot(cscore=None, loadings=None, labels=None, var1=None, var2=None, var3=None,
+           axlabelfontsize=9, xaxisname=None, yaxisname=None, axlabelfontname="Arial",
+           figname='biplot_2d', show=False, save=True,
            figtype='png', r=300, markerdot="o", dotsize=6, valphadot=1, colordot='#eba487',
            arrowcolor='#87ceeb', xpadstart=0.2, xpadend=0.2, ypadstart=0.2, ypadend=0.2, limitisexact=0,
            valphaarrow=1, arrowlinestyle='-', arrowlinewidth=0.5, centerlines=True, colorlist=None,
@@ -60,8 +64,8 @@ def biplot(cscore=None, loadings=None, labels=None, var1=None, var2=None, var3=N
             pyplot.xlim(xpadstart, xpadend)
             pyplot.ylim(ypadstart, ypadend)
 
-        x_label = "PC1 ({}%)".format(var1)
-        y_label = "PC2 ({}%)".format(var2)
+        x_label = f"{'PC1' if Functions.is_none_or_whitespace(xaxisname) else xaxisname} ({var1}%)"
+        y_label = f"{'PC2' if Functions.is_none_or_whitespace(yaxisname) else yaxisname} ({var2}%)"
         pyplot.xlabel(x_label, fontsize=axlabelfontsize, fontname=axlabelfontname)
         pyplot.ylabel(y_label, fontsize=axlabelfontsize, fontname=axlabelfontname)
 
@@ -76,8 +80,9 @@ def biplot(cscore=None, loadings=None, labels=None, var1=None, var2=None, var3=N
             pyplot.style.use('default')
 
 
-def scatter(x_2d=None, target=None, axlabelfontsize=9, axlabelfontname="Arial", figname='scatter_2d',
-            figtype='png', r=300, show=False, save=True,
+def scatter(x_2d=None, target=None,
+            axlabelfontsize=9, xaxisname=None, yaxisname=None, axlabelfontname="Arial",
+            figname='scatter_2d', figtype='png', r=300, show=False, save=True,
             markerdot="o", dotsize=6, valphadot=1, colordot='#eba487',
             arrowcolor='#87ceeb', xpadstart=0.2, xpadend=0.2, ypadstart=0.2, ypadend=0.2, limitisexact=0,
             valphaarrow=1, arrowlinestyle='-', arrowlinewidth=0.5, centerlines=True,
@@ -119,11 +124,10 @@ def scatter(x_2d=None, target=None, axlabelfontsize=9, axlabelfontname="Arial", 
         pyplot.xlim(xpadstart, xpadend)
         pyplot.ylim(ypadstart, ypadend)
 
-    # What to put in the axis labels?
-    # x_label = "PC1 ({}%)".format(var1)
-    # y_label = "PC2 ({}%)".format(var2)
-    # pyplot.xlabel(x_label, fontsize=axlabelfontsize, fontname=axlabelfontname)
-    # pyplot.ylabel(y_label, fontsize=axlabelfontsize, fontname=axlabelfontname)
+    x_label = f"{'X' if Functions.is_none_or_whitespace(xaxisname) else xaxisname}"
+    y_label = f"{'Y' if Functions.is_none_or_whitespace(yaxisname) else yaxisname}"
+    pyplot.xlabel(x_label, fontsize=axlabelfontsize, fontname=axlabelfontname)
+    pyplot.ylabel(y_label, fontsize=axlabelfontsize, fontname=axlabelfontname)
 
     if save:
         pyplot.savefig(figname + '.' + figtype, format=figtype, bbox_inches='tight', dpi=r)

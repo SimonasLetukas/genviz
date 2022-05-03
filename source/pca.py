@@ -28,6 +28,8 @@ class Pca(ClusterizationMethod):
                     colorlist=self._target,
                     show=show,
                     save=save,
+                    xaxisname=self._axis_name_x,
+                    yaxisname=self._axis_name_y,
                     axlabelfontsize=self._axlabelfontsize,
                     r=self._r,
                     markerdot=self._markerdot,

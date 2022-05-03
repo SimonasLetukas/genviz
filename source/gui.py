@@ -90,6 +90,10 @@ class Gui(BaseWidget):
         self._marker_alpha = ControlSlider('Alpha value of the marker: ', minimum=0, maximum=100, default=80,
                                            helptext='Alpha of 100 has no transparency while alpha of 0 is fully transparent')
 
+        self._axis_name_x = ControlText('X-axis name: ')
+        self._axis_name_y = ControlText('Y-axis name: ')
+        self._axis_font_size = ControlNumber('Axis font size: ', default=9, minimum=1)
+
         self._zoom_selection = ControlCombo('Axis zoom: ', helptext='Select how the zooming on the axis is done')
         self._zoom_selection.add_item('Padding (start and end values get added to the axis limits)', '1')
         self._zoom_selection.add_item('Exact (start and end values of axes are set)', '2')
@@ -139,6 +143,7 @@ class Gui(BaseWidget):
             ('_resolution_label', '_resolution_low_button', '_resolution_medium_button', '_resolution_high_button'),
             ('_dimensions_x', '_dimensions_y'),
             ('_marker_size', '_marker_alpha'),
+            ('_axis_name_x', '_axis_name_y', '_axis_font_size'),
             '_zoom_selection',
             ('_x_start', '_x_end', '_y_start', '_y_end'),
             '',
@@ -272,6 +277,13 @@ class Gui(BaseWidget):
             print(marker_alpha)
             pca.set_marker_alpha(marker_alpha)
 
+            print(self._axis_font_size.value)
+            pca.set_label_font_size(int(self._axis_font_size.value))
+
+            print(self._axis_name_x.value)
+            print(self._axis_name_y.value)
+            pca.set_axis_labels(self._axis_name_x.value, self._axis_name_y.value)
+
             x_start = float(self._x_start.value)
             x_end = float(self._x_end.value)
             y_start = float(self._y_start.value)
@@ -325,6 +337,13 @@ class Gui(BaseWidget):
             marker_alpha = float(self._marker_alpha.value) / 100
             print(marker_alpha)
             mds.set_marker_alpha(marker_alpha)
+
+            print(self._axis_font_size.value)
+            mds.set_label_font_size(int(self._axis_font_size.value))
+
+            print(self._axis_name_x.value)
+            print(self._axis_name_y.value)
+            mds.set_axis_labels(self._axis_name_x.value, self._axis_name_y.value)
 
             x_start = float(self._x_start.value)
             x_end = float(self._x_end.value)

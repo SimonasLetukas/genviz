@@ -13,7 +13,9 @@ class ClusterizationMethod:
     def __init__(self, input_path, header_names, use_columns, classifier_column):
         self._figname = 'biplot_2d'
         self._r = RESOLUTION_MEDIUM
-        self._axlabelfontsize = 8
+        self._axlabelfontsize = 9
+        self._axis_name_x = None
+        self._axis_name_y = None
         self._markerdot = 'o'
         self._dotsize = 2
         self._valphadot = 0.8
@@ -67,6 +69,10 @@ class ClusterizationMethod:
 
     def set_label_font_size(self, value):
         self._axlabelfontsize = value
+
+    def set_axis_labels(self, x, y):
+        self._axis_name_x = x
+        self._axis_name_y = y
 
     def set_marker_format(self, value):
         self._markerdot = value
