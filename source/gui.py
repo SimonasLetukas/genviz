@@ -90,11 +90,19 @@ class Gui(BaseWidget):
         self._generate_pca_button.value = self.__generate_pca_pressed
 
         self._show_pca = ControlCheckBox('Preview')
+        self._show_pca.changed_event = self.__show_pca_checked
+        self._generate_pca_file = ControlCheckBox('Generate File')
+        self._generate_pca_file.value = True
+        self._generate_pca_file.enabled = False
 
         self._generate_mds_button = ControlButton('Generate MDS')
         self._generate_mds_button.value = self.__generate_mds_pressed
 
         self._show_mds = ControlCheckBox('Preview')
+        self._show_mds.changed_event = self.__show_mds_checked
+        self._generate_mds_file = ControlCheckBox('Generate File')
+        self._generate_mds_file.value = True
+        self._generate_mds_file.enabled = False
 
         self._clear_logs_button = ControlButton('Clear logs')
         self._clear_logs_button.value = self.__clear_logs_button_pressed
@@ -121,9 +129,9 @@ class Gui(BaseWidget):
             ('_x_start', '_x_end', '_y_start', '_y_end'),
             '',
             'Output Diagrams',
-            ('_generate_pca_button', '=', '_show_pca'),
+            ('_generate_pca_button', '=', '_show_pca', '_generate_pca_file'),
             '',
-            ('_generate_mds_button', '=', '_show_mds')
+            ('_generate_mds_button', '=', '_show_mds', '_generate_mds_file')
         ]
 
     def __data_file_selected(self):
@@ -189,6 +197,20 @@ class Gui(BaseWidget):
     def __clear_logs_button_pressed(self):
         self._event_log.value = 'No error logs to show.'
 
+    def __show_pca_checked(self):
+        if self._show_pca.value is False:
+            self._generate_pca_file.enabled = False
+            self._generate_pca_file.value = True
+        else:
+            self._generate_pca_file.enabled = True
+
+    def __show_mds_checked(self):
+        if self._show_mds.value is False:
+            self._generate_mds_file.enabled = False
+            self._generate_mds_file.value = True
+        else:
+            self._generate_mds_file.enabled = True
+
     def __get_selected_classifier_column(self):
         if self._selected_classifier_column is SelectedClassifierColumn.START:
             return SelectedClassifierColumn.START.name
@@ -245,7 +267,7 @@ class Gui(BaseWidget):
             else:
                 pca.set_exact(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
 
-            pca.output(show=self._show_pca.value)
+            pca.output(show=self._show_pca.value, save=self._generate_pca_file.value)
         except Exception:
             self._event_log.value = traceback.format_exc(limit=1)
 
@@ -298,6 +320,6 @@ class Gui(BaseWidget):
             else:
                 mds.set_exact(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
 
-            mds.output(show=self._show_mds.value)
+            mds.output(show=self._show_mds.value, save=self._generate_mds_file.value)
         except Exception:
             self._event_log.value = traceback.format_exc(limit=1)

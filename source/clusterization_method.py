@@ -95,5 +95,5 @@ class ClusterizationMethod:
         self._isexact = 1
 
     @abstractmethod
-    def output(self, show=0):
+    def output(self, show=0, save=1):
         pass

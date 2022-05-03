@@ -18,7 +18,7 @@ class Pca(ClusterizationMethod):
 
         self._pca_scores = PCA().fit_transform(self._x_st)
 
-    def output(self, show=0):
+    def output(self, show=0, save=1):
         plot.biplot(figname=self._figname,
                     cscore=self._pca_scores,
                     loadings=self._loadings,
@@ -27,6 +27,7 @@ class Pca(ClusterizationMethod):
                     var2=round(self._pca_out.explained_variance_ratio_[1] * 100, 2),
                     colorlist=self._target,
                     show=show,
+                    save=save,
                     axlabelfontsize=self._axlabelfontsize,
                     r=self._r,
                     markerdot=self._markerdot,

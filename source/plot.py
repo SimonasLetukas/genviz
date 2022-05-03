@@ -5,12 +5,13 @@ from matplotlib.colors import ListedColormap
 
 # from https://github.com/reneshbedre/bioinfokit/blob/master/bioinfokit/visuz.py
 def biplot(cscore=None, loadings=None, labels=None, var1=None, var2=None, var3=None, axlabelfontsize=9,
-           axlabelfontname="Arial", figname='biplot_2d',
-           figtype='png', r=300, show=False, markerdot="o", dotsize=6, valphadot=1, colordot='#eba487',
+           axlabelfontname="Arial", figname='biplot_2d', show=False, save=True,
+           figtype='png', r=300, markerdot="o", dotsize=6, valphadot=1, colordot='#eba487',
            arrowcolor='#87ceeb', xpadstart=0.2, xpadend=0.2, ypadstart=0.2, ypadend=0.2, limitisexact=0,
            valphaarrow=1, arrowlinestyle='-', arrowlinewidth=0.5, centerlines=True, colorlist=None,
            legendpos='best',
            datapoints=True, dim=(6, 4), theme=None):
+
     if theme == 'dark':
         pyplot.style.use('dark_background')
     assert cscore is not None and loadings is not None and labels is not None and var1 is not None and var2 is not None, \
@@ -64,12 +65,11 @@ def biplot(cscore=None, loadings=None, labels=None, var1=None, var2=None, var3=N
         pyplot.xlabel(x_label, fontsize=axlabelfontsize, fontname=axlabelfontname)
         pyplot.ylabel(y_label, fontsize=axlabelfontsize, fontname=axlabelfontname)
 
+        if save:
+            pyplot.savefig(figname + '.' + figtype, format=figtype, bbox_inches='tight', dpi=r)
+
         if show:
             pyplot.show()
-        else:
-            pyplot.savefig(figname + '.' + figtype, format=figtype, bbox_inches='tight', dpi=r)
-            pyplot.clf()
-            pyplot.close()
 
         # Return theme to default
         if theme == 'dark':
@@ -77,16 +77,17 @@ def biplot(cscore=None, loadings=None, labels=None, var1=None, var2=None, var3=N
 
 
 def scatter(x_2d=None, target=None, axlabelfontsize=9, axlabelfontname="Arial", figname='scatter_2d',
-            figtype='png', r=300, show=False, markerdot="o", dotsize=6, valphadot=1, colordot='#eba487',
+            figtype='png', r=300, show=False, save=True,
+            markerdot="o", dotsize=6, valphadot=1, colordot='#eba487',
             arrowcolor='#87ceeb', xpadstart=0.2, xpadend=0.2, ypadstart=0.2, ypadend=0.2, limitisexact=0,
             valphaarrow=1, arrowlinestyle='-', arrowlinewidth=0.5, centerlines=True,
             legendpos='best', dim=(6, 4), theme=None):
+
     if theme == 'dark':
         pyplot.style.use('dark_background')
 
     assert x_2d is not None and target is not None, "x_2d or target cannot be empty"
 
-    print('here')
     pyplot.subplots(figsize=dim)
 
     unique_class = set(target)
@@ -124,12 +125,11 @@ def scatter(x_2d=None, target=None, axlabelfontsize=9, axlabelfontname="Arial", 
     # pyplot.xlabel(x_label, fontsize=axlabelfontsize, fontname=axlabelfontname)
     # pyplot.ylabel(y_label, fontsize=axlabelfontsize, fontname=axlabelfontname)
 
+    if save:
+        pyplot.savefig(figname + '.' + figtype, format=figtype, bbox_inches='tight', dpi=r)
+
     if show:
         pyplot.show()
-    else:
-        pyplot.savefig(figname + '.' + figtype, format=figtype, bbox_inches='tight', dpi=r)
-        pyplot.clf()
-        pyplot.close()
 
     # Return theme to default
     if theme == 'dark':

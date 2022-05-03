@@ -18,11 +18,12 @@ class Mds(ClusterizationMethod):
         self._x_2d = mds.fit_transform(self._x_minmax)
         print(self._x_2d)
 
-    def output(self, show=0):
+    def output(self, show=0, save=1):
         plot.scatter(figname=self._figname,
                      x_2d=self._x_2d,
                      target=self._target,
                      show=show,
+                     save=save,
                      axlabelfontsize=self._axlabelfontsize,
                      r=self._r,
                      markerdot=self._markerdot,
