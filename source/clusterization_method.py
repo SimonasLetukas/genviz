@@ -36,12 +36,22 @@ class ClusterizationMethod:
         print(self._df.head(2))
 
         col_count = self._df.shape[1]
-        cols_without_classifier = [x for x in range(col_count) if x != int(classifier_column) - 1]
+        calculated_classifier_column = self.get_classifier_column(classifier_column, col_count)
+        print(f'calculated_classifier_column: {calculated_classifier_column}')
+        cols_without_classifier = [x for x in range(col_count) if x != int(calculated_classifier_column)]
 
         self._x = self._df.iloc[:, cols_without_classifier]
-        self._target = self._df.iloc[:, int(classifier_column) - 1].to_numpy()
+        self._target = self._df.iloc[:, int(calculated_classifier_column)].to_numpy()
 
         print(self._x.head(2))
+
+    @staticmethod
+    def get_classifier_column(classifier_column, col_count):
+        if classifier_column == 'START':
+            return 0
+        if classifier_column == 'END':
+            return col_count - 1
+        return classifier_column - 1
 
     def set_figure_name(self, value):
         self._figname = value + '_pca'
