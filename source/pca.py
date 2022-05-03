@@ -3,6 +3,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 import plot
+from source.functions import Functions
 
 RESOLUTION_HIGH = 1000
 RESOLUTION_MEDIUM = 500
@@ -11,7 +12,7 @@ RESOLUTION_LOW = 100
 
 class Pca:
     def __init__(self, input_path, header_names, use_columns, classifier_column):
-        # set defaults
+
         self._figname = 'biplot_2d'
         self._r = RESOLUTION_MEDIUM
         self._axlabelfontsize = 8
@@ -24,15 +25,13 @@ class Pca:
         self._ypadstart = 0.2
         self._ypadend = 0.2
         self._isexact = 0
-        # ['chromosome',
-        #  'rs#',
-        #  'genetic distance (morgans)',
-        #  'base-pair position (bp units)']
-        names = None if header_names is None or header_names.strip() == '' \
-            else header_names.strip().split(',')
 
-        usecols = None if use_columns is None or use_columns.strip() is False \
-            else [x - 1 for x in [int(x) for x in use_columns.split(',') if x.strip().isdigit()]]
+        names = None if Functions.is_none_or_whitespace(header_names) else header_names.strip().split(',')
+
+        raw_col_count = None if Functions.is_none_or_whitespace(use_columns) \
+            else (pandas.read_csv(input_path, sep=None, header='infer', engine='python')).shape[1]
+        usecols = None if Functions.is_none_or_whitespace(use_columns) \
+            else Functions().get_column_list_from_input(use_columns, raw_col_count)
 
         self._df = pandas.read_csv(input_path, sep=None, header='infer', engine='python', usecols=usecols, names=names)
 

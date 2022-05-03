@@ -37,7 +37,8 @@ class Gui(BaseWidget):
         self._data_file.changed_event = self.__data_file_selected
         self._input_headers = ControlTextArea('Comma-separated headers (if empty, first row from the input file will '
                                               'be used instead): ', default='')
-        self._use_columns = ControlTextArea('Use columns (comma-separated indexes, starts at 1; use all if empty): ',
+        self._use_columns = ControlTextArea('Use columns (comma-separated indexes, starts at 1, control range with a '
+                                            'dash (e.g. \n1-2, -5, 3-); use all columns if empty): ',
                                             default='')
         self._classifier_column = ControlNumber('Index of classifier column (starts at 1, calculated from used '
                                                 'columns above): ', default=1, minimum=1)
@@ -152,8 +153,8 @@ class Gui(BaseWidget):
             print(data_file)
             if data_file is None:
                 return
-            pca = Pca(input_path=data_file, header_names=self._input_headers.value, use_columns=self._use_columns.value,
-                      classifier_column=self._classifier_column.value)
+            pca = Pca(input_path=data_file, header_names=self._input_headers.value,
+                      use_columns=self._use_columns.value, classifier_column=self._classifier_column.value)
 
             output_file = self._output_file.value
             print(output_file)
@@ -205,8 +206,8 @@ class Gui(BaseWidget):
             print(data_file)
             if data_file is None:
                 return
-            mds = Mds(input_path=data_file, header_names=self._input_headers.value, use_columns=self._use_columns.value,
-                      classifier_column=self._classifier_column.value)
+            mds = Mds(input_path=data_file, header_names=self._input_headers.value,
+                      use_columns=self._use_columns.value, classifier_column=self._classifier_column.value)
 
             output_file = self._output_file.value
             print(output_file)
