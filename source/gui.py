@@ -237,9 +237,9 @@ class Gui(BaseWidget):
             return SelectedClassifierColumn.END.name
         return self._classifier_column.value
 
-    def __show_alert(self):
+    def __show_alert(self, message):
         if self._show_pca.value is False:
-            alert = AlertWindow(f'{self._output_file.value} saved successfully')
+            alert = AlertWindow(f'{message} saved successfully')
             alert.show()
 
     def __generate_pca_pressed(self):
@@ -256,7 +256,7 @@ class Gui(BaseWidget):
             print(output_file)
             if output_file is None:
                 return
-            pca.set_figure_name(output_file)
+            pca.set_figure_name(output_file + '_pca')
 
             print(self._selected_resolution)
             if self._selected_resolution is SelectedResolution.HIGH:
@@ -299,7 +299,7 @@ class Gui(BaseWidget):
                 pca.set_exact(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
 
             pca.output(show=self._show_pca.value, save=self._generate_pca_file.value)
-            self.__show_alert()
+            self.__show_alert(output_file + '_pca')
         except Exception:
             self._event_log.value = traceback.format_exc(limit=1)
 
@@ -317,7 +317,7 @@ class Gui(BaseWidget):
             print(output_file)
             if output_file is None:
                 return
-            mds.set_figure_name(output_file)
+            mds.set_figure_name(output_file + '_mds')
 
             print(self._selected_resolution)
             if self._selected_resolution is SelectedResolution.HIGH:
@@ -360,6 +360,6 @@ class Gui(BaseWidget):
                 mds.set_exact(x_start=x_start, x_end=x_end, y_start=y_start, y_end=y_end)
 
             mds.output(show=self._show_mds.value, save=self._generate_mds_file.value)
-            self.__show_alert()
+            self.__show_alert(output_file + '_mds')
         except Exception:
             self._event_log.value = traceback.format_exc(limit=1)

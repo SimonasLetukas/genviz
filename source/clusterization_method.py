@@ -56,7 +56,7 @@ class ClusterizationMethod:
         return classifier_column - 1
 
     def set_figure_name(self, value):
-        self._figname = value + '_pca'
+        self._figname = value
 
     def set_high_resolution(self):
         self._r = RESOLUTION_HIGH
