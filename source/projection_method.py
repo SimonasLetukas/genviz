@@ -9,7 +9,7 @@ RESOLUTION_MEDIUM = 500
 RESOLUTION_LOW = 100
 
 
-class ClusterizationMethod:
+class ProjectionMethod:
     def __init__(self, input_path, header_names, use_columns, classifier_column):
         self._figname = 'biplot_2d'
         self._r = RESOLUTION_MEDIUM

@@ -163,3 +163,8 @@ fabric.properties
 *.bim
 *.fam
 *.log
+/source/data/~$HP.xlsx
+/source/data/~$VNP.xlsx
+/source/data/ANEall.eigs
+/source/data/HP.xlsx
+/source/data/VNP.xlsx

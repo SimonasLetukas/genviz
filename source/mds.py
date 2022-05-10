@@ -2,10 +2,10 @@ from sklearn.manifold import MDS
 from sklearn.preprocessing import MinMaxScaler
 
 from source import plot
-from source.clusterization_method import ClusterizationMethod
+from source.projection_method import ProjectionMethod
 
 
-class Mds(ClusterizationMethod):
+class Mds(ProjectionMethod):
     def __init__(self, input_path, header_names, use_columns, classifier_column):
         super().__init__(input_path, header_names, use_columns, classifier_column)
 
