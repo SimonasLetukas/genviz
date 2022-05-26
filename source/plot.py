@@ -4,7 +4,7 @@ from matplotlib.colors import ListedColormap
 
 
 # from https://github.com/reneshbedre/bioinfokit/blob/master/bioinfokit/visuz.py
-from source.functions import Functions
+from functions import Functions
 
 
 def biplot(cscore=None, loadings=None, labels=None, var1=None, var2=None, var3=None,

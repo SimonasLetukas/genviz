@@ -1,8 +1,8 @@
 from sklearn.manifold import MDS
 from sklearn.preprocessing import MinMaxScaler
 
-from source import plot
-from source.projection_method import ProjectionMethod
+import plot
+from projection_method import ProjectionMethod
 
 
 class Mds(ProjectionMethod):

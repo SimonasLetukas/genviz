@@ -1,7 +1,7 @@
 import traceback
 from enum import Enum
 
-from pyforms import BaseWidget
+from pyforms.basewidget import BaseWidget
 from pyforms.controls import ControlFile
 from pyforms.controls import ControlText
 from pyforms.controls import ControlTextArea
@@ -12,8 +12,8 @@ from pyforms.controls import ControlNumber
 from pyforms.controls import ControlCombo
 from pyforms.controls import ControlCheckBox
 
-from source.mds import Mds
-from source.pca import Pca
+from mds import Mds
+from pca import Pca
 
 
 class SelectedResolution(Enum):

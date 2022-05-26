@@ -2,7 +2,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 import plot
-from source.projection_method import ProjectionMethod
+from projection_method import ProjectionMethod
 
 
 class Pca(ProjectionMethod):

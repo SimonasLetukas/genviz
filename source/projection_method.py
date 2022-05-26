@@ -2,7 +2,7 @@ from abc import abstractmethod
 
 import pandas
 
-from source.functions import Functions
+from functions import Functions
 
 RESOLUTION_HIGH = 1000
 RESOLUTION_MEDIUM = 500
